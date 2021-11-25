@@ -32,6 +32,18 @@ sudo apt install mariadb-server
 sudo mysql_secure_installation
 ```
 >`mysql_secure_installation` le permitirá acceder a la configuración de mariadb.
+6. SQLAlchemy
+  - Desde el bash:
+  ```bash
+  sudo apt-get install python-mysqldb
+  sudo easy_install MySQL-Python
+sudo apt-get install -y python3-sqlalchemy
+  ```
+  - También puede hacerlo con pip:
+  ```bash
+  pip install MySql-Python
+  pip install SQLAlchemy
+  ```
 
 ---
 <h2>¿Qué es ETL?</h2>

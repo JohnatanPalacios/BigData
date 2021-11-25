@@ -45,6 +45,7 @@ for line in sys.stdin:
                     .first()
                     .codigodane)
         
-        if id_mp: Add_Registro(clasebien, fecha, cant, id_mp)
+        if id_mp:
+            Add_Registro(clasebien, fecha, cant, id_mp)
+            logger.info("Registrando incautación {} {} {} {} en la BD".format(clasebien, fecha, cant, codane))
         else: print('%s\t%s\t%s\t%s\t' % (clasebien, fecha, cant, codane))
-        logger.info("Registrando incautación {} {} {} {} en la BD".format(clasebien, fecha, cant, codane))

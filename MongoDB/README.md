@@ -2,10 +2,17 @@
 
 - Comandos básicos de mongo:
 ```bash
-sudo service mongod restart
 sudo service mongod start
+sudo systemctl start mongod
+
+sudo service mongod restart
+sudo systemctl restart mongod
+
 sudo service mongod stop
+sudo systemctl stop mongod
+
 sudo service mongod status
+sudo systemctl status mongod
 ```
 
 <h2>Importar un archivo a MongoDB</h2>
@@ -104,4 +111,86 @@ db.Cacao.find({$or:[{DEPARTAMENTO:'VICHADA'}, {DEPARTAMENTO:'AMAZONAS'}]})
 ```bash
 db.Cacao.find({$and:[{AreaCosechada:{$gt:5}}, {DEPARTAMENTO:'AMAZONAS'}]})
 ```
+
+
+- <strong>Actualizar</strong>
+```bash
+db.libros.update({titulo:'la peste'}, {$set: {temas:['literatura','existencialismo']}})
+```
+```bash
+db.COLLECTION.update({CONSULTA}, {$set:{INFO_UPDATE}})
+```
+  - Actualizar, agregando un nuevo valor:
+  ```bash
+  db.Empleados.update({Doc:8}, {$set: {Genero: 'F'}})
+  ```
+
+- Buscar todos los elementos que contengan un determinado string, se usará ```/string/``` para esto:
+```bash
+db.Empleados.find({Nombre:/Ana/}).pretty()
+```
+
 - <strong>Agregaciones</strong>:
+  - Encontrar ```$match``` y agrupar sacando el promedio ```$group``` ```$avg```:
+  ```bash
+  db.Cacao.aggregate([
+    {$match: {DEPARTAMENTO: 'RISARALDA'}},
+    {$group: {_id: null, prom: {$avg: '$AreaSembrada'}}}
+    ])
+    ```
+  - Encontrar ```$match``` y agrupar sacando el total ```$sum```:
+  ```bash
+  db.Cacao.aggregate([
+    {$match: {DEPARTAMENTO: 'RISARALDA'}},
+    {$group: {_id: null, total: {$sum: '$AreaSembrada'}}}
+    ])
+    ```
+- Acciones fuera de la DB:
+```bash
+mongo --eval 'db.Cacao.findOne()' Cultivos
+```
+El retorno será:
+```bash
+{
+	"_id" : ObjectId("61a179b0a40b89836615b6f5"),
+	"DEPARTAMENTO" : "ANTIOQUIA",
+	"Codmun" : 5120,
+	"MUNICIPIO" : "CACERES",
+	"CULTIVO" : "CACAO",
+	"PERIODO" : 2018,
+	"AreaSembrada" : 2044,
+	"AreaCosechada" : 850,
+	"Produccion" : 510,
+	"Rendimiento" : 0.6
+}
+```
+
+---
+<h1><strong>MapReduce desde MongoDB</strong></h1>
+
+- Departamentos:
+```bash
+var map = function(){
+  emit(this.DEPARTAMENTO,1);
+  }
+var reduce = function(llave,valor){
+  return Array.sum(valor);
+}
+db.Cacao.mapReduce(map,reduce, {out:'conteo'})
+```
+
+- AreaCosechada por Departamentos:
+```bash
+mongo < CacaoMRArea.js 
+```
+- AreaCosechada de Departamentos por Municipios:
+```bash
+mongo < CacaoMR_RisArea.js
+```
+
+---
+<h1><strong>Exportar Datos</strong></h1>
+
+```bash
+mongoexport --db Cultivos --collection Area --type=csv --fields _id,value --out Areas_nacional.csv
+```

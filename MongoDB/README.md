@@ -194,3 +194,18 @@ mongo < CacaoMR_RisArea.js
 ```bash
 mongoexport --db Cultivos --collection Area --type=csv --fields _id,value --out Areas_nacional.csv
 ```
+
+
+---
+<h1><strong>PyMongo</strong></h1>
+
+- Instalar librería:
+```bash
+pip3 install pymongo
+```
+
+---
+<h1><strong>Ingestión de Datos</strong></h1>
+El archivo Cns_LgMongo.py plantea los inicios al tema de la ingestión de datos.
+
+>MongoDB nos permite hacer pre procesamiento.

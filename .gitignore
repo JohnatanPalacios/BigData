@@ -1,4 +1,5 @@
 __pycache__/
+__venv__/
 .pem
 .ppk
 .db
